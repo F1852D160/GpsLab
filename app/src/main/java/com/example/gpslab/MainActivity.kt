@@ -11,10 +11,21 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.UiSettings
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var txtUbicacion: TextView
+
+    private val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
+    lateinit var mMapView: MapView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,6 +41,21 @@ class MainActivity : AppCompatActivity() {
         } else {
             solicitarPermisosDeUbicacion()
         }
+
+
+
+
+        //inicializar mapa
+//        Bundle mapViewBundle = null;
+        var mapViewBundle: Bundle? = null
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY)
+        }
+        mMapView = findViewById(R.id.mapView)
+        mMapView.onCreate(mapViewBundle)
+        mMapView.getMapAsync(this)
+
+        //end inicializar mapa
 
 
     }
@@ -104,5 +130,34 @@ class MainActivity : AppCompatActivity() {
                     txtUbicacion.text = "No se puede obtener la ubicacion"
                 }
             })
+    }
+
+    var myMap: GoogleMap? = null
+
+    var lt = -21.5360986
+    var lg = -64.7154756
+
+    override fun onMapReady(map: GoogleMap) {
+        myMap = map
+
+
+        val markerOptions1 =
+            MarkerOptions().position(LatLng(-21.585975, -64.700308)).title("Mi Ubicacion1")
+
+        map.addMarker(markerOptions1)
+
+
+        val markerOptions2 =
+            MarkerOptions().position(LatLng(lt, lg)).title("Mi Ubicacion 2")
+
+        map.addMarker(markerOptions2)
+
+
+        val uiSettings: UiSettings = map.getUiSettings()
+        uiSettings.isZoomControlsEnabled = true // Habilitar controles de zoom
+        val Liberty =
+            CameraPosition.builder().target(LatLng(lt, lg)).zoom(16f).bearing(0f).tilt(45f).build()
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty))
+
     }
 }

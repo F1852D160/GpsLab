@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /><!-- desde el api sdk 29 location -->
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
 
 
     <application
@@ -19,6 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GpsLab"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB1BsOrhGCVR2pGlvudXiihJN1IrV2hfj4" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
